@@ -10,16 +10,18 @@ interface UserProfile {
   username?: string;
   createdAt: string;
   total_cards_collected?: number;
-  collection?: PokemonCard[]; // Asegúrate de que PokemonCard esté definido en tu proyecto
+  collection?: PokemonCard[];
 }
 export const createUserProfileDocument = async (user: User) => {
-  if (!user) return; // Si no hay usuario, sal de la función
+  if (!user) return;
+
+  console.log("Checking user profile creation for:", user.email);
 
   const userRef = doc(db, "usuarios", user.uid);
-
   const userSnapshot = await getDoc(userRef);
 
   if (!userSnapshot.exists()) {
+    console.log("Creating new user profile in Firestore for:", user.email);
     const { email } = user;
     const createdAt = new Date().toISOString();
 
@@ -32,26 +34,12 @@ export const createUserProfileDocument = async (user: User) => {
     };
 
     try {
-      // Usar setDoc para crear el documento con los datos iniciales
       await setDoc(userRef, userProfile);
-      console.log(
-        `Perfil de usuario creado en Firestore para: ${email} (UID: ${user.uid})`
-      );
+      console.log("User profile created successfully");
     } catch (error) {
-      console.error("Error creando el perfil de usuario en Firestore:", error);
-      // Aquí podrías manejar el error, quizás mostrando un mensaje al usuario
+      console.log("Error creating user profile:", error);
     }
   } else {
-    // El documento ya existe. El usuario ya había iniciado sesión antes.
-    // Puedes actualizar la fecha de última conexión aquí si lo deseas
-    // try {
-    //   await updateDoc(userRef, { lastLogin: new Date().toISOString() });
-    //   console.log(`Perfil de usuario actualizado en Firestore para: ${user.email}`);
-    // } catch (error) {
-    //   console.error('Error actualizando el perfil de usuario en Firestore:', error);
-    // }
-    console.log(
-      `Perfil de usuario ya existe en Firestore para: ${user.email} (UID: ${user.uid})`
-    );
+    console.log("User profile already exists! Welcome back!", user.email);
   }
 };
