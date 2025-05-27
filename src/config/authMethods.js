@@ -10,6 +10,8 @@ export async function signInWithGoogle() {
     const result = await signInWithPopup(auth, googleProvider);
     console.log("User authenticated with Google successfully:");
     console.log("Upserting user profile in Firestore...");
+    // redirect to the home page after successful sign-in
+    window.location.href = "/";
     await createUserProfileDocument(result.user);
   } catch (error) {
     const errorCode = error.code;
