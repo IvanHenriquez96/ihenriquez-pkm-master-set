@@ -1,8 +1,8 @@
 const NewCardButton = () => {
   return (
-    <div className="card card-border bg-base-100 w-80 h-50 flex items-center justify-center">
+    <button className="fixed bottom-4 right-4 bg-blue-500 hover:bg-blue-700 text-white font-bold rounded-full w-16 h-16 flex items-center justify-center text-xl shadow-md z-50">
       +
-    </div>
+    </button>
   );
 };
 
